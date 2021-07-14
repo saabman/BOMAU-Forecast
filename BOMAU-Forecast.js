@@ -10,7 +10,7 @@ Module.register("BOMAU-Forecast", {
 	defaults: {
 		daysToForecast: 5, // how many days to include in upcoming forecast
 
-    		updateInterval: 60 * 60 * 1000, // 60 minutes
+    		updateInterval: 240 * 60 * 1000, // 4 hours
    		initialLoadDelay: 1000,
     		retryDelay: 2500
 	},
