@@ -4,4 +4,4 @@ Forcast Module for Magic Mirror utilising data from the Australian Bureau of Met
 
 based on the weather Module WB-Weather from the Wallberry Theme for Magic Mirror
 
-requires recording for differnt sites currently set to Goulburn NSW
+requires recodeing for differnt sites, currently set to Goulburn NSW
