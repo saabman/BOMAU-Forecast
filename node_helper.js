@@ -34,6 +34,7 @@ async function example() {
     }
     catch(err) {
         console.log("error" + err)
+	this.sendSocketNotification("NETWORK_ERROR", err);
     }
     client.close()
 }
