@@ -10,8 +10,8 @@ Module.register("BOMAU-Forecast", {
 	defaults: {
 		daysToForecast: 5, // how many days to include in upcoming forecast
 
-    		updateInterval: 240 * 60 * 1000, // 4 hours
-   		initialLoadDelay: 1000,
+    		updateInterval: 4 * (60 * 60 * 1000), // 4 hours
+   			initialLoadDelay: 1000,
     		retryDelay: 2500
 	},
 
@@ -116,6 +116,7 @@ Module.register("BOMAU-Forecast", {
 
 	scheduleUpdate: function(delay=null) {
 		var nextFetch = this.config.updateInterval;
+		console.log(nextFetch);
 		if (delay !== null && delay >= 0) {
 			nextFetch = delay;
 		}
@@ -150,6 +151,7 @@ Module.register("BOMAU-Forecast", {
 			case "forecastAvailable":
 				//console.log("forcast available",currentWeather);
 				this.wdata.fetchForecast = currentWeather;
+				this.scheduleUpdate();
 	//			console.log(this.wdata.fetchForecast);
 				break;
 
@@ -191,7 +193,7 @@ Module.register("BOMAU-Forecast", {
 
 	// handles processing all the weather data for the template
 	getWeatherDataForTemplate: function() {
-		 
+
 		//if (this.wdata.fetchResponse == null || this.wdata.fetchResponse.statusCode != 200) {
 		//	console.log ("if we don't have weather data we can just return now");
 		//	return null;
