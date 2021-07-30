@@ -126,27 +126,6 @@ Module.register("BOMAU-Forecast", {
 	socketNotificationReceived: function(notification, currentWeather) {
 
 		switch(notification) {
-			//log.info("switch");
-			//log.info(notification);
-			/*case "NETWORK_ERROR":
-				// this is likely due to connection issue - we should retry in a bit
-				Log.error("Error reaching BOM Current Weather: ", currentWeather);
-				this.wdata.fetchError = currentWeather;
-				this.scheduleUpdate();
-				break;*/
-
-			/*case "DATA_AVAILABLE":
-				console.log(currentWeather.statusCode);
-				// code 200 means all went well - we have weather data
-				if (currentWeather.statusCode == 200) {
-					this.scheduleUpdate();
-					console.log("code 200",currentWeather);
-				} else {
-					// if we get anything other than a 200 from BOM it's probably a config error or something else the user will have to restart MagicMirror to address - we shouldn't schedule anymore updates
-					Log.error("BOM Error: ", currentWeather);
-				}
-				this.wdata.fetchResponse = currentWeather;
-				break;*/
 
 			case "forecastAvailable":
 				//console.log("forcast available",currentWeather);
@@ -194,54 +173,15 @@ Module.register("BOMAU-Forecast", {
 	// handles processing all the weather data for the template
 	getWeatherDataForTemplate: function() {
 
-		//if (this.wdata.fetchResponse == null || this.wdata.fetchResponse.statusCode != 200) {
-		//	console.log ("if we don't have weather data we can just return now");
-		//	return null;
-		//}
+		if (this.wdata.fetchForecast == null) {
+			console.log ("if we don't have weather data we can just return now");
+			return null;
+		}
 
-		//let bom = JSON.parse(this.wdata.fetchResponse.body);
 		let bomForecast = JSON.parse(this.wdata.fetchForecast);
 		console.log(bomForecast);
 		var weather = {};
     		weather.forecast = [];
-
-// gets the BOM air temp, cloud cover discription and the apparent temp.
-
-    /*weather.currentTemp = (bom.observations.data[0].air_temp);
-		//weather.currentDescription = bom.observations.data[0].cloud;
-		currentDescription = bom.observations.data[0].cloud;
-		console.log(currentDescription);
-		weather.feelsLike = ("Feels Like "+ bom.observations.data[0].apparent_t);*/
-
-// The best BOM gives us for info for a weather icon is the cloud field which
-// doesnt distinguish between day and night. To get around this we get the
-// current time of day and if its after 18:00 or before 06:00 we call that
-// night, otherwise its day.
-
-	/*	var date = new Date();
-		var timeOfDay = ('day')
-		var now = date.getHours();
-		console.log(now);
-		if (now > 18||now < 6) {
-			timeOfDay = ('night')
-			}
-			else{timeOfDay = ('day')
-			}
-			console.log(timeOfDay);
-
-
-
-		currentIcont = this.convertWeatherType(currentDescription);
-		console.log (currentIcont);
-		if (currentIcont == 'cloudy'){
-			weather.currentIcon = (currentIcont)
-		}
-		else {
-		weather.currentIcon = (currentIcont) + '-'+ (timeOfDay)
-		}
-
-		console.log('weather Icon ' + weather.currentIcon);*/
-
 
 // THis section takes the Forecast Information and picks out the bits to display
 		for (var i=0; i<this.config.daysToForecast; i++) {  //the number of days the forcast runs for
@@ -283,6 +223,7 @@ Module.register("BOMAU-Forecast", {
 			var date = new Date(forecast["start-time-local"][0]); // not sure about the x1000 here
 			console.log(date);
 			day.dayLabel = moment.weekdaysShort(date.getDay());
+
 
 			// changing the day label to "today" instead of day of the week
 			if (i === 0) {

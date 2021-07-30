@@ -18,19 +18,25 @@ fetchData: function() {
   console.log("fetching data");
   this.downloadForecast();
   console.log("have we returned");
+  //this.convertWeather();
 },
 
 downloadForecast: function() {
-    wtf().then(this.convertWeather());
+    var context = this;
+    wtf();
     async function wtf() {
       const client = new ftp.Client();
-      client.ftp.verbose = true;
+      client.ftp.verbose = false;
       try {
         await client.access({
           host: "ftp.bom.gov.au"
         })
-          console.log(await client.list())
-          await client.downloadTo("weatherdata.xml", "/anon/gen/fwo/IDN11107.xml")
+          console.log("wait for download");
+          await client.downloadTo("weatherdata.xml", "/anon/gen/fwo/IDN11107.xml");
+          console.log("ive downloaded");
+          await context.convertWeather();
+          console.log("weather converted");
+
       }
       catch(err) {
           console.log("error" + err);
